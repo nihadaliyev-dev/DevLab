@@ -2,6 +2,10 @@ import { memo } from "react";
 import { MoreHorizontalIcon } from "lucide-react";
 import Card from "../../ui/Card/Card";
 import { type CryptoAsset } from "../../../types";
+import btcIcon from "../../../assets/Bitcoin.svg";
+import solIcon from "../../../assets/Solana.svg";
+import ethIcon from "../../../assets/Ethereum.svg";
+import adaIcon from "../../../assets/Cardano.svg";
 
 interface LivePricesCardProps {
   assets?: CryptoAsset[];
@@ -11,6 +15,7 @@ interface LivePricesCardProps {
 
 const defaultAssets: CryptoAsset[] = [
   {
+    icon: btcIcon,
     symbol: "BTC",
     name: "Bitcoin",
     price: 64210.12,
@@ -18,6 +23,7 @@ const defaultAssets: CryptoAsset[] = [
     changePercent: 1.24,
   },
   {
+    icon: ethIcon,
     symbol: "ETH",
     name: "Ethereum",
     price: 3180.45,
@@ -25,6 +31,7 @@ const defaultAssets: CryptoAsset[] = [
     changePercent: -0.58,
   },
   {
+    icon: solIcon,
     symbol: "SOL",
     name: "Solana",
     price: 182.1,
@@ -32,6 +39,7 @@ const defaultAssets: CryptoAsset[] = [
     changePercent: 2.9,
   },
   {
+    icon: adaIcon,
     symbol: "ADA",
     name: "Cardano",
     price: 0.52,
@@ -64,9 +72,15 @@ const LivePricesCard = memo<LivePricesCardProps>(
           {assets.map((asset) => (
             <div
               key={asset.symbol}
-              className="flex gap-[0.5rem] items-center justify-left rounded-[1.5rem] py-[0.75rem] px-[1.5rem] bg-linear-to-r transition-all ease-in-out from:transparent via:transparent to-transparent hover:via-[#fbfbfb20]"
+              className="flex gap-[0.8rem] items-center justify-left rounded-[1.5rem] py-[0.75rem] px-[0.5rem] bg-linear-to-r transition-all ease-in-out from:transparent via:transparent to-transparent hover:via-[#fbfbfb20]"
             >
-              <div className="rounded-full w-2 h-2 bg-blue-500"></div>
+              <div className="rounded-full h-full w-[2.4rem]">
+                <img
+                  src={asset.icon}
+                  className="w-full h-full"
+                  alt={asset.name}
+                />
+              </div>
               <div className="flex flex-col w-[60%]">
                 <p className="font-medium text-lg">{asset.name}</p>
                 <p className="font-normal text-xs text-white/60">
