@@ -10,8 +10,6 @@ interface MobileMenuProps {
 }
 
 const MobileMenu = memo<MobileMenuProps>(({ isOpen, onClose }) => {
-  // Keep the menu mounted always; control interactivity and visibility via CSS
-
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape" && isOpen) {
@@ -58,7 +56,7 @@ const MobileMenu = memo<MobileMenuProps>(({ isOpen, onClose }) => {
         aria-modal="true"
         aria-hidden={!isOpen}
       >
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col h-full relative">
           <div className="flex items-center justify-between p-4 border-b border-[#fbfbfb20]">
             <h2 className="text-lg font-semibold text-[#fbfbfb]">Menu</h2>
             <button
@@ -106,7 +104,6 @@ const MobileMenu = memo<MobileMenuProps>(({ isOpen, onClose }) => {
                     to={item.to}
                     end={item.end}
                     onClick={() => {
-                      // Add a small delay for smooth transition
                       setTimeout(() => onClose(), 150);
                     }}
                     className={({ isActive }) =>

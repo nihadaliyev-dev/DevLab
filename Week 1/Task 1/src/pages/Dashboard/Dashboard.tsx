@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, Suspense, lazy } from "react";
+import React, { useState, useMemo, useCallback, Suspense, lazy } from "react";
 import { DndContext, closestCenter } from "@dnd-kit/core";
 import type { DragEndEvent } from "@dnd-kit/core";
 import {
@@ -11,6 +11,7 @@ import { CSS } from "@dnd-kit/utilities";
 import type { CSSProperties, ReactElement } from "react";
 import ErrorBoundary from "../../components/ui/ErrorBoundary/ErrorBoundary";
 import { type DashboardItem } from "../../types";
+import { useSettings } from "../../contexts/SettingsContext";
 
 // Lazy load dashboard components for better performance
 const BalanceOverviewCard = lazy(
@@ -125,155 +126,131 @@ function SortableCard({
 }
 
 const Dashboard = () => {
-  const defaultItems: DashboardItem[] = useMemo(
-    () => [
-      {
-        id: "balance",
-        colSpanClass: "xl:col-span-1",
-        element: (
-          <Suspense fallback={<CardSkeleton />}>
-            <BalanceOverviewCard />
-          </Suspense>
-        ),
-      },
-      {
-        id: "priceChart",
-        colSpanClass: "xl:col-span-2",
-        element: (
-          <Suspense fallback={<CardSkeleton />}>
-            <PriceChartCard />
-          </Suspense>
-        ),
-      },
-      {
-        id: "portfolioDistribution",
-        colSpanClass: "xl:col-span-1",
-        element: (
-          <Suspense fallback={<CardSkeleton />}>
-            <PortfolioDistributionCard />
-          </Suspense>
-        ),
-      },
-      {
-        id: "profitLoss",
-        colSpanClass: "xl:col-span-1",
-        element: (
-          <Suspense fallback={<CardSkeleton />}>
-            <ProfitLossCard />
-          </Suspense>
-        ),
-      },
-      {
-        id: "marketTrends",
-        colSpanClass: "xl:col-span-2",
-        element: (
-          <Suspense fallback={<CardSkeleton />}>
-            <MarketTrendsCard />
-          </Suspense>
-        ),
-      },
-      {
-        id: "livePrices",
-        colSpanClass: "xl:col-span-1",
-        element: (
-          <Suspense fallback={<CardSkeleton />}>
-            <LivePricesCard />
-          </Suspense>
-        ),
-      },
-      {
-        id: "favorites",
-        colSpanClass: "xl:col-span-1",
-        element: (
-          <Suspense fallback={<CardSkeleton />}>
-            <FavoritesCard />
-          </Suspense>
-        ),
-      },
-      {
-        id: "recentTransactions",
-        colSpanClass: "xl:col-span-2",
-        element: (
-          <Suspense fallback={<CardSkeleton />}>
-            <RecentTransactionsCard />
-          </Suspense>
-        ),
-      },
-      {
-        id: "newsFeed",
-        colSpanClass: "xl:col-span-1",
-        element: (
-          <Suspense fallback={<CardSkeleton />}>
-            <NewsFeedCard />
-          </Suspense>
-        ),
-      },
-      {
-        id: "securityStatus",
-        colSpanClass: "xl:col-span-1",
-        element: (
-          <Suspense fallback={<CardSkeleton />}>
-            <SecurityStatusCard />
-          </Suspense>
-        ),
-      },
-    ],
+  const { cardConfigs } = useSettings();
+
+  const cardComponents = useMemo(
+    () => ({
+      balance: (
+        <Suspense fallback={<CardSkeleton />}>
+          <BalanceOverviewCard />
+        </Suspense>
+      ),
+      priceChart: (
+        <Suspense fallback={<CardSkeleton />}>
+          <PriceChartCard />
+        </Suspense>
+      ),
+      portfolioDistribution: (
+        <Suspense fallback={<CardSkeleton />}>
+          <PortfolioDistributionCard />
+        </Suspense>
+      ),
+      profitLoss: (
+        <Suspense fallback={<CardSkeleton />}>
+          <ProfitLossCard />
+        </Suspense>
+      ),
+      marketTrends: (
+        <Suspense fallback={<CardSkeleton />}>
+          <MarketTrendsCard />
+        </Suspense>
+      ),
+      livePrices: (
+        <Suspense fallback={<CardSkeleton />}>
+          <LivePricesCard />
+        </Suspense>
+      ),
+      favorites: (
+        <Suspense fallback={<CardSkeleton />}>
+          <FavoritesCard />
+        </Suspense>
+      ),
+      recentTransactions: (
+        <Suspense fallback={<CardSkeleton />}>
+          <RecentTransactionsCard />
+        </Suspense>
+      ),
+      newsFeed: (
+        <Suspense fallback={<CardSkeleton />}>
+          <NewsFeedCard />
+        </Suspense>
+      ),
+      securityStatus: (
+        <Suspense fallback={<CardSkeleton />}>
+          <SecurityStatusCard />
+        </Suspense>
+      ),
+    }),
     []
   );
 
-  const [items, setItems] = useState<DashboardItem[]>(() => {
+  const visibleItems: DashboardItem[] = useMemo(() => {
+    return cardConfigs
+      .filter((config) => config.visible)
+      .map((config) => ({
+        id: config.id,
+        colSpanClass: config.colSpanClass,
+        element: cardComponents[config.id as keyof typeof cardComponents] || (
+          <div>Card not found</div>
+        ),
+      }));
+  }, [cardConfigs, cardComponents]);
+
+  const [itemOrder, setItemOrder] = useState<string[]>(() => {
     try {
       const stored = localStorage.getItem("dashItems");
-      if (!stored) return defaultItems;
+      if (!stored) return visibleItems.map((item) => item.id);
       const savedIds: unknown = JSON.parse(stored);
-      if (!Array.isArray(savedIds)) return defaultItems;
-      const idOrder = savedIds.filter(
-        (v): v is string => typeof v === "string"
-      );
-      if (idOrder.length === 0) return defaultItems;
-
-      const byId = new Map(defaultItems.map((it) => [it.id, it] as const));
-      const ordered: DashboardItem[] = [];
-
-      for (const id of idOrder) {
-        const match = byId.get(id);
-        if (match) ordered.push(match);
-      }
-
-      for (const it of defaultItems) {
-        if (!idOrder.includes(it.id)) ordered.push(it);
-      }
-
-      return ordered.length ? ordered : defaultItems;
+      if (!Array.isArray(savedIds)) return visibleItems.map((item) => item.id);
+      return savedIds.filter((v): v is string => typeof v === "string");
     } catch {
-      return defaultItems;
+      return visibleItems.map((item) => item.id);
     }
   });
+
+  // Update item order when visible items change
+  React.useEffect(() => {
+    const visibleIds = visibleItems.map((item) => item.id);
+    setItemOrder((prev) => {
+      const newOrder = [...prev];
+      // Remove items that are no longer visible
+      const filtered = newOrder.filter((id) => visibleIds.includes(id));
+      // Add new visible items that weren't in the order
+      const newItems = visibleIds.filter((id) => !filtered.includes(id));
+      return [...filtered, ...newItems];
+    });
+  }, [visibleItems]);
+
+  const orderedItems = useMemo(() => {
+    const itemMap = new Map(visibleItems.map((item) => [item.id, item]));
+    return itemOrder
+      .map((id) => itemMap.get(id))
+      .filter((item): item is DashboardItem => item !== undefined);
+  }, [visibleItems, itemOrder]);
 
   const handleDragEnd = useCallback(
     (event: DragEndEvent) => {
       const { active, over } = event;
       if (!over || active.id === over.id) return;
-      const oldIndex = items.findIndex((i) => i.id === active.id);
-      const newIndex = items.findIndex((i) => i.id === over.id);
+      const oldIndex = itemOrder.findIndex((id) => id === active.id);
+      const newIndex = itemOrder.findIndex((id) => id === over.id);
       if (oldIndex === -1 || newIndex === -1) return;
-      const newItems = arrayMove(items, oldIndex, newIndex);
-      setItems(newItems);
-      const ids = newItems.map((i) => i.id);
-      localStorage.setItem("dashItems", JSON.stringify(ids));
+      const newOrder = arrayMove(itemOrder, oldIndex, newIndex);
+      setItemOrder(newOrder);
+      localStorage.setItem("dashItems", JSON.stringify(newOrder));
     },
-    [items]
+    [itemOrder]
   );
 
   return (
     <ErrorBoundary>
       <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
         <SortableContext
-          items={items.map((i) => i.id)}
+          items={orderedItems.map((i) => i.id)}
           strategy={rectSortingStrategy}
         >
           <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4 items-stretch auto-rows-fr">
-            {items.map((item) => (
+            {orderedItems.map((item) => (
               <SortableCard
                 key={item.id}
                 id={item.id}

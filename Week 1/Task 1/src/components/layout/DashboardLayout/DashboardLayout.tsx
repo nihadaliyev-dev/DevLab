@@ -1,15 +1,41 @@
+import React from "react";
 import { Outlet } from "react-router";
 import Header from "../Header/Header";
+import Sidebar from "../Sidebar/Sidebar";
 import Footer from "../Footer/Footer";
+import SettingsModal from "../../ui/SettingsModal/SettingsModal";
+import { useSettings } from "../../../contexts/SettingsContext";
 
 const DashboardLayout = () => {
+  const { navbarLayout } = useSettings();
+
   return (
-    <div className="p-[1.5rem] bg-[#000010] overflow-hidden">
-      <Header />
+    <div className="min-h-screen bg-[#000010] overflow-hidden">
+      {/* Sidebar */}
+      <Sidebar />
 
-      <Outlet />
+      {/* Main content area */}
+      <div
+        className={`transition-all duration-300 ${
+          navbarLayout === "sidebar" ? "ml-64" : "ml-0"
+        }`}
+      >
+        {/* Header - only show in header layout */}
+        {navbarLayout === "header" && <Header />}
 
-      <Footer />
+        {/* Main content */}
+        <div
+          className={`p-[1.5rem] ${navbarLayout === "sidebar" ? "pt-6" : ""}`}
+        >
+          <Outlet />
+        </div>
+
+        {/* Footer */}
+        <Footer />
+      </div>
+
+      {/* Settings Modal */}
+      <SettingsModal />
     </div>
   );
 };

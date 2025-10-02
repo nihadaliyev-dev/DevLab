@@ -2,6 +2,7 @@ import { Route, Routes } from "react-router";
 import { Suspense, lazy } from "react";
 import "./styles/tailwind.css";
 import ErrorBoundary from "./components/ui/ErrorBoundary/ErrorBoundary";
+import { SettingsProvider } from "./contexts/SettingsContext";
 
 // Lazy load pages for better performance
 const DashboardLayout = lazy(
@@ -23,17 +24,19 @@ const PageLoader = () => (
 function App() {
   return (
     <ErrorBoundary>
-      <Suspense fallback={<PageLoader />}>
-        <Routes>
-          <Route element={<DashboardLayout />}>
-            <Route index element={<Dashboard />} />
-            <Route path="analytics" element={<Analytics />} />
-            <Route path="settings" element={<Settings />} />
-            <Route path="users" element={<Users />} />
-          </Route>
-          <Route path="login" element={<Login />} />
-        </Routes>
-      </Suspense>
+      <SettingsProvider>
+        <Suspense fallback={<PageLoader />}>
+          <Routes>
+            <Route element={<DashboardLayout />}>
+              <Route index element={<Dashboard />} />
+              <Route path="analytics" element={<Analytics />} />
+              <Route path="settings" element={<Settings />} />
+              <Route path="users" element={<Users />} />
+            </Route>
+            <Route path="login" element={<Login />} />
+          </Routes>
+        </Suspense>
+      </SettingsProvider>
     </ErrorBoundary>
   );
 }

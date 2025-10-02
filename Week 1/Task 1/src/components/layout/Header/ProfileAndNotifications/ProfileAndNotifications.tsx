@@ -1,6 +1,7 @@
 import { memo } from "react";
 import { type User, type Notification } from "../../../../types";
 import { Bell, BellPlus, Bolt } from "lucide-react";
+import { useSettings } from "../../../../contexts/SettingsContext";
 
 interface ProfileAndNotificationsProps {
   user?: User;
@@ -20,11 +21,18 @@ const ProfileAndNotifications = memo<ProfileAndNotificationsProps>(
   ({ user = defaultUser, notifications = [] }) => {
     const unreadCount = notifications.filter((n) => !n.read).length;
     const hasNotifications = notifications.length > 0;
+    const { openSettings } = useSettings();
 
+    const handleSettingsToggle = () => {
+      openSettings();
+    };
     return (
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-2">
-          <button className="relative p-3 rounded-full bg-[#0E1520]/80 backdrop-blur-sm border border-[#fbfbfb20] text-[#fbfbfb] hover:bg-[#1a2332]/80 hover:scale-105 hover:shadow-[0_4px_20px_rgba(0,34,170,0.3)] transition-all duration-200 group">
+          <button
+            onClick={handleSettingsToggle}
+            className="relative p-3 rounded-full bg-[#0E1520]/80 backdrop-blur-sm border border-[#fbfbfb20] text-[#fbfbfb] hover:bg-[#1a2332]/80 hover:scale-105 hover:shadow-[0_4px_20px_rgba(0,34,170,0.3)] transition-all duration-200 group"
+          >
             <Bolt className="w-5 h-5" />
             <div className="absolute inset-0 bg-gradient-to-r from-[#0022aaaf] to-[#0044ccaf] rounded-full opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
           </button>
