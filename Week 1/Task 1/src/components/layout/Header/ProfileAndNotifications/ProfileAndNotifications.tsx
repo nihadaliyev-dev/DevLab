@@ -1,7 +1,7 @@
 import { memo } from "react";
 import { type User, type Notification } from "../../../../types";
 import { Bell, BellPlus, Bolt } from "lucide-react";
-import { useSettings } from "../../../../contexts/SettingsContext";
+import { useSettings } from "../../../../hooks/useSettings";
 
 interface ProfileAndNotificationsProps {
   user?: User;

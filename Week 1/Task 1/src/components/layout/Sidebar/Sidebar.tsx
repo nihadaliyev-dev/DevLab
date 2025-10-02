@@ -1,6 +1,6 @@
 import React from "react";
 import { Home, BarChart3, Settings, Users, TrendingUp } from "lucide-react";
-import { useSettings } from "../../../contexts/SettingsContext";
+import { useSettings } from "../../../hooks/useSettings";
 
 const Sidebar: React.FC = () => {
   const { navbarLayout } = useSettings();

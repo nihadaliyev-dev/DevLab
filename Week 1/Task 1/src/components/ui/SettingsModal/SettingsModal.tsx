@@ -9,7 +9,7 @@ import {
   Save,
   RotateCcw,
 } from "lucide-react";
-import { useSettings } from "../../../contexts/SettingsContext";
+import { useSettings } from "../../../hooks/useSettings";
 
 const SettingsModal: React.FC = () => {
   const {

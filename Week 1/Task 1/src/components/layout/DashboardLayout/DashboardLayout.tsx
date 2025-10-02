@@ -1,10 +1,9 @@
-import React from "react";
 import { Outlet } from "react-router";
 import Header from "../Header/Header";
 import Sidebar from "../Sidebar/Sidebar";
 import Footer from "../Footer/Footer";
 import SettingsModal from "../../ui/SettingsModal/SettingsModal";
-import { useSettings } from "../../../contexts/SettingsContext";
+import { useSettings } from "../../../hooks/useSettings";
 
 const DashboardLayout = () => {
   const { navbarLayout } = useSettings();

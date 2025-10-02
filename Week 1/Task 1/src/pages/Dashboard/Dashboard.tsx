@@ -11,7 +11,7 @@ import { CSS } from "@dnd-kit/utilities";
 import type { CSSProperties, ReactElement } from "react";
 import ErrorBoundary from "../../components/ui/ErrorBoundary/ErrorBoundary";
 import { type DashboardItem } from "../../types";
-import { useSettings } from "../../contexts/SettingsContext";
+import { useSettings } from "../../hooks/useSettings";
 
 // Lazy load dashboard components for better performance
 const BalanceOverviewCard = lazy(
@@ -186,8 +186,8 @@ const Dashboard = () => {
 
   const visibleItems: DashboardItem[] = useMemo(() => {
     return cardConfigs
-      .filter((config) => config.visible)
-      .map((config) => ({
+      .filter((config: any) => config.visible)
+      .map((config: any) => ({
         id: config.id,
         colSpanClass: config.colSpanClass,
         element: cardComponents[config.id as keyof typeof cardComponents] || (

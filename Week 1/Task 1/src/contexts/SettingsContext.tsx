@@ -1,17 +1,10 @@
 import React, {
   createContext,
-  useContext,
   useState,
   useEffect,
-  ReactNode,
+  type ReactNode,
 } from "react";
-
-export interface CardConfig {
-  id: string;
-  name: string;
-  visible: boolean;
-  colSpanClass: string;
-}
+import { type CardConfig, defaultCardConfigs } from "../constants/cardConfigs";
 
 export interface SettingsContextValue {
   // Card visibility settings
@@ -29,80 +22,10 @@ export interface SettingsContextValue {
   closeSettings: () => void;
 }
 
-const defaultCardConfigs: CardConfig[] = [
-  {
-    id: "balance",
-    name: "Balance Overview",
-    visible: true,
-    colSpanClass: "xl:col-span-1",
-  },
-  {
-    id: "priceChart",
-    name: "Price Chart",
-    visible: true,
-    colSpanClass: "xl:col-span-2",
-  },
-  {
-    id: "portfolioDistribution",
-    name: "Portfolio Distribution",
-    visible: true,
-    colSpanClass: "xl:col-span-1",
-  },
-  {
-    id: "profitLoss",
-    name: "Profit & Loss",
-    visible: true,
-    colSpanClass: "xl:col-span-1",
-  },
-  {
-    id: "marketTrends",
-    name: "Market Trends",
-    visible: true,
-    colSpanClass: "xl:col-span-2",
-  },
-  {
-    id: "livePrices",
-    name: "Live Prices",
-    visible: true,
-    colSpanClass: "xl:col-span-1",
-  },
-  {
-    id: "favorites",
-    name: "Favorites",
-    visible: true,
-    colSpanClass: "xl:col-span-1",
-  },
-  {
-    id: "recentTransactions",
-    name: "Recent Transactions",
-    visible: true,
-    colSpanClass: "xl:col-span-2",
-  },
-  {
-    id: "newsFeed",
-    name: "News Feed",
-    visible: true,
-    colSpanClass: "xl:col-span-1",
-  },
-  {
-    id: "securityStatus",
-    name: "Security Status",
-    visible: true,
-    colSpanClass: "xl:col-span-1",
-  },
-];
 
-const SettingsContext = createContext<SettingsContextValue | undefined>(
+export const SettingsContext = createContext<SettingsContextValue | undefined>(
   undefined
 );
-
-export const useSettings = () => {
-  const context = useContext(SettingsContext);
-  if (!context) {
-    throw new Error("useSettings must be used within a SettingsProvider");
-  }
-  return context;
-};
 
 interface SettingsProviderProps {
   children: ReactNode;

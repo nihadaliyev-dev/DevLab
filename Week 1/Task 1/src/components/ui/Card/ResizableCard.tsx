@@ -41,7 +41,7 @@ const ResizableCard = memo<ResizableCardProps>(
       [size.width, size.height]
     );
     const [isResizing, setIsResizing] = useState(false);
-    const startPos = useRef<{ x: number; y: number; w: number; h: number }>();
+    const startPos = useRef<{ x: number; y: number; w: number; h: number } | undefined>(undefined);
 
     const onPointerDown = (e: React.PointerEvent<HTMLButtonElement>) => {
       const el = containerRef.current;
