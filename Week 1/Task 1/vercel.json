@@ -1,0 +1,7 @@
+{
+  "framework": "vite",
+  "installCommand": "npm install --prefix \"Task 1\"",
+  "buildCommand": "npm run build --prefix \"Task 1\"",
+  "outputDirectory": "Task 1/dist",
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+}
