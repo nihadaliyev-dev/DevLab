@@ -9,31 +9,25 @@ const DashboardLayout = () => {
   const { navbarLayout } = useSettings();
 
   return (
-    <div className="min-h-screen bg-[#000010] overflow-hidden">
-      {/* Sidebar */}
+    <div className="min-h-screen overflow-hidden bg-gray-50 text-gray-900 dark:bg-[#000010] dark:text-[#fbfbfb]">
       <Sidebar />
 
-      {/* Main content area */}
       <div
         className={`transition-all duration-300 ${
-          navbarLayout === "sidebar" ? "ml-64" : "ml-0"
+          navbarLayout === "sidebar" ? "lg:ml-64 ml-12" : "ml-0"
         }`}
       >
-        {/* Header - only show in header layout */}
         {navbarLayout === "header" && <Header />}
 
-        {/* Main content */}
         <div
           className={`p-[1.5rem] ${navbarLayout === "sidebar" ? "pt-6" : ""}`}
         >
           <Outlet />
         </div>
 
-        {/* Footer */}
         <Footer />
       </div>
 
-      {/* Settings Modal */}
       <SettingsModal />
     </div>
   );

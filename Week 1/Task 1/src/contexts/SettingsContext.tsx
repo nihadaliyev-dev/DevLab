@@ -22,7 +22,6 @@ export interface SettingsContextValue {
   closeSettings: () => void;
 }
 
-
 export const SettingsContext = createContext<SettingsContextValue | undefined>(
   undefined
 );

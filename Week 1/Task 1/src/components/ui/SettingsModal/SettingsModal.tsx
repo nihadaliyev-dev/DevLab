@@ -94,7 +94,8 @@ const SettingsModal: React.FC = () => {
           </button>
         </div>
 
-        <div className="p-6 space-y-8 max-h-[70vh] overflow-y-auto">``
+        <div className="p-6 space-y-8 max-h-[70vh] overflow-y-auto">
+          ``
           <div className="space-y-4">
             <h3 className="text-lg font-medium text-[#fbfbfb] flex items-center gap-2">
               <Sidebar className="w-5 h-5" />

@@ -19,7 +19,11 @@ const Header = memo(() => {
 
   return (
     <>
-      <header className="relative flex items-center justify-between rounded-full py-[0.5rem] px-[1rem] bg-gradient-to-b from-[#0022aaaf] to-[transparent] border-[1px] border-[#fbfbfb80] backdrop-blur-md shadow-[0_8px_32px_rgba(0,34,170,0.3)] hover:shadow-[0_12px_40px_rgba(0,34,170,0.4)] transition-all duration-500 ease-out animate-fade-in-down">
+      <header
+        className="relative flex items-center justify-between rounded-full py-[0.5rem] px-[1rem] backdrop-blur-md transition-all duration-500 ease-out animate-fade-in-down
+        bg-white/80 border border-gray-200 shadow-sm hover:shadow-md
+        dark:bg-gradient-to-b dark:from-[#0022aaaf] dark:to-[transparent] dark:border-[#fbfbfb20] dark:shadow-[0_8px_32px_rgba(0,34,170,0.3)] dark:hover:shadow-[0_12px_40px_rgba(0,34,170,0.4)]"
+      >
         <div className="flex-shrink-0 z-50 animate-scale-in">
           <Logo />
         </div>
@@ -48,24 +52,26 @@ const Header = memo(() => {
 
         <button
           onClick={handleMobileMenuToggle}
-          className="lg:hidden relative z-50 p-2 rounded-full bg-[#0E1520]/80 backdrop-blur-sm border border-[#fbfbfb20] hover:bg-[#1a2332]/80 transition-all duration-300 hover:scale-110 hover:shadow-[0_4px_20px_rgba(0,34,170,0.3)] animate-scale-in"
+          className="lg:hidden relative z-50 p-2 rounded-full backdrop-blur-sm transition-all duration-300 hover:scale-110 animate-scale-in
+            bg-white/80 border border-gray-200 hover:bg-gray-100 shadow-sm hover:shadow-md
+            dark:bg-[#0E1520]/80 dark:border-[#fbfbfb20] dark:hover:bg-[#1a2332]/80 dark:hover:shadow-[0_4px_20px_rgba(0,34,170,0.3)]"
           style={{ animationDelay: "0.4s" }}
           aria-label="Toggle mobile menu"
           aria-expanded={isMobileMenuOpen}
         >
           <div className="w-6 h-6 flex flex-col justify-center items-center">
             <span
-              className={`block w-5 h-0.5 bg-[#fbfbfb] transition-all duration-500 ease-out ${
+              className={`block w-5 h-0.5 bg-gray-900 dark:bg-[#fbfbfb] transition-all duration-500 ease-out ${
                 isMobileMenuOpen ? "rotate-45 translate-y-1" : ""
               }`}
             />
             <span
-              className={`block w-5 h-0.5 bg-[#fbfbfb] mt-1 transition-all duration-500 ease-out ${
+              className={`block w-5 h-0.5 bg-gray-900 dark:bg-[#fbfbfb] mt-1 transition-all duration-500 ease-out ${
                 isMobileMenuOpen ? "opacity-0" : ""
               }`}
             />
             <span
-              className={`block w-5 h-0.5 bg-[#fbfbfb] mt-1 transition-all duration-500 ease-out ${
+              className={`block w-5 h-0.5 bg-gray-900 dark:bg-[#fbfbfb] mt-1 transition-all duration-500 ease-out ${
                 isMobileMenuOpen ? "-rotate-45 -translate-y-1" : ""
               }`}
             />
